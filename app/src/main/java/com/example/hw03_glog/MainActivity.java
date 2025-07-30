@@ -12,13 +12,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hw03_glog.database.GymLogRepository;
+import com.example.hw03_glog.database.entities.GymLog;
 import com.example.hw03_glog.databinding.ActivityMainBinding;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
+   private  ActivityMainBinding binding;
+   private GymLogRepository repository;
 
     public static final String TAG = "RCP_GYMLOG";
 
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        repository = new GymLogRepository(getApplication());
+
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
 
 
@@ -39,11 +44,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getInformationFromDisplay();
+                insertGymLogRecord();
                 updateDisplay();
 
             }
         });
 
+    }
+
+    private void insertGymLogRecord(){
+        GymLog log = new GymLog(mExercise,mWeight,mReps);
+        repository.insertGymLog(log);
     }
 
     private void updateDisplay() {
